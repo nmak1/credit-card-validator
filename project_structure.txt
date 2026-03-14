@@ -1,0 +1,40 @@
+Структура проекта
+==================================================
+credit-card-validator
+    ├── .github
+    │   └── workflows
+    │       └── ci.yml
+    ├── src
+    │   ├── assets
+    │   │   ├── american-express.svg
+    │   │   ├── diners-club.svg
+    │   │   ├── discover.svg
+    │   │   ├── icons8-виза-48.png
+    │   │   ├── icons8-мир-48.png
+    │   │   ├── icons8-неизвестный-66.png
+    │   │   ├── jcb.svg
+    │   │   ├── mastercard.svg
+    │   │   ├── mir.svg
+    │   │   ├── validator.png
+    │   │   └── visa.svg
+    │   ├── css
+    │   │   └── style.css
+    │   ├── js
+    │   │   ├── app.js
+    │   │   ├── cardValidator.js
+    │   │   └── paymentSystemDetector.js
+    │   └── index.html
+    ├── tests
+    │   ├── mocks
+    │   │   ├── fileMock.js
+    │   │   └── styleMock.js
+    │   ├── cardValidator.test.js
+    │   ├── dom.test.js
+    │   └── paymentSystemDetector.test.js
+    ├── tests-puppeteer
+    │   └── integration.test.js
+    ├── .babelrc
+    ├── jest.config.js
+    ├── package.json
+    ├── README.md
+    └── tree.py

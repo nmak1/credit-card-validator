@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Validator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Credit Card Validator</h1>
+
+        <div class="validator-container">
+            <div class="card-preview">
+                <div class="card">
+                    <div class="card-front">
+                        <div class="card-logo" id="paymentSystemLogo">
+                            <img src="assets/icons8-неизвестный-66.png" alt="Payment System">
+                        </div>
+                        <div class="card-number-display">**** **** **** ****</div>
+                        <div class="card-holder">CARD HOLDER NAME</div>
+                        <div class="card-expiry">MM/YY</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="cardNumber">Номер карты:</label>
+                <input
+                    type="text"
+                    id="cardNumber"
+                    placeholder="XXXX XXXX XXXX XXXX"
+                    maxlength="19"
+                    autocomplete="off"
+                >
+                <div id="paymentSystem" class="payment-system"></div>
+                <div id="validationResult" class="validation-result"></div>
+            </div>
+
+            <div class="info">
+                <p>Поддерживаемые платежные системы:</p>
+                <div class="payment-icons">
+                    <img src="assets/visa.svg" alt="Visa" title="Visa">
+                    <img src="assets/mastercard.svg" alt="Mastercard" title="Mastercard">
+                    <img src="assets/american-express.svg" alt="American Express" title="American Express">
+                    <img src="assets/discover.svg" alt="Discover" title="Discover">
+                    <img src="assets/jcb.svg" alt="JCB" title="JCB">
+                    <img src="assets/diners-club.svg" alt="Diners Club" title="Diners Club">
+                    <img src="assets/mir.svg" alt="Мир" title="Мир">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/cardValidator.js"></script>
+    <script src="js/paymentSystemDetector.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
