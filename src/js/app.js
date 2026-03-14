@@ -21,7 +21,7 @@ class CreditCardApp {
     const rawValue = e.target.value;
     const cleaned = rawValue.replace(/[^\d]/g, '');
 
-    // Limit to 19 digits
+    // Limit to 19 digits (максимальная длина номера карты)
     const limited = cleaned.slice(0, 19);
 
     // Format with spaces
