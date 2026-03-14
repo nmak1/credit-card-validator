@@ -1,131 +1,125 @@
-module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-    jest: true
-  },
-  extends: [
-    'eslint:recommended',
-    'airbnb-base'
-  ],
-  parserOptions: {
-    ecmaVersion: 12,
-    sourceType: 'module'
-  },
-  plugins: [
-    'jest'
-  ],
-  rules: {
-    // Отступы - 2 пробела
-    'indent': ['error', 2],
+import js from '@eslint/js';
+import globals from 'globals';
+import jestPlugin from 'eslint-plugin-jest';
+import importPlugin from 'eslint-plugin-import';
 
-    // Кавычки - одинарные
-    'quotes': ['error', 'single'],
+export default [
+  // Базовые правила ESLint
+  js.configs.recommended,
 
-    // Точки с запятой - обязательны
-    'semi': ['error', 'always'],
+  // Основная конфигурация для всех JS файлов
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+      }
+    },
+    plugins: {
+      import: importPlugin,
+      jest: jestPlugin
+    },
+    rules: {
+      // Отступы - 2 пробела
+      'indent': ['error', 2],
 
-    // Максимальная длина строки - 100 символов (увеличиваем для тестов)
-    'max-len': ['warn', {
-      'code': 120,  // Увеличили до 120
-      'ignoreUrls': true,
-      'ignoreStrings': true,
-      'ignoreTemplateLiterals': true
-    }],
+      // Кавычки - одинарные
+      'quotes': ['error', 'single'],
 
-    // Запретить console.log в продакшене
-    'no-console': ['warn', {
-      'allow': ['warn', 'error']
-    }],
+      // Точки с запятой - обязательны
+      'semi': ['error', 'always'],
 
-    // Предпочитать const если переменная не переназначается
-    'prefer-const': 'error',
+      // Максимальная длина строки
+      'max-len': ['warn', {
+        code: 120,
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true
+      }],
 
-    // Запретить неиспользуемые переменные
-    'no-unused-vars': ['error', {
-      'argsIgnorePattern': '^_',
-      'varsIgnorePattern': '^_'
-    }],
+      // Запретить console.log
+      'no-console': ['warn', {
+        allow: ['warn', 'error']
+      }],
 
-    // Разрешить for...of циклы
-    'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
+      // Предпочитать const
+      'prefer-const': 'error',
 
-    // Разрешить использование "_" в качестве имени параметра
-    'no-underscore-dangle': ['error', {
-      'allow': ['_'],
-      'allowAfterThis': true
-    }],
+      // Запретить неиспользуемые переменные
+      'no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_'
+      }],
 
-    // Импорты должны быть в начале файла
-    'import/order': ['error', {
-      'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-      'newlines-between': 'always'
-    }],
+      // Разрешить for...of циклы
+      'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
 
-    // Запретить экспорт по умолчанию в некоторых случаях
-    'import/prefer-default-export': 'off',
+      // Разрешить использование "_"
+      'no-underscore-dangle': ['error', {
+        allow: ['_'],
+        allowAfterThis: true
+      }],
 
-    // Разрешить импорт devDependencies в тестах
-    'import/no-extraneous-dependencies': ['error', {
-      'devDependencies': [
-        '**/*.test.js',
-        '**/tests/**/*.js',
-        '**/tests-puppeteer/**/*.js',
-        'jest.config.js',
-        '.eslintrc.js'
-      ]
-    }],
+      // Порядок импортов
+      'import/order': ['error', {
+        groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+        'newlines-between': 'always'
+      }],
 
-    // ОТКЛЮЧАЕМ проблемные правила для нашего проекта
-    'import/extensions': 'off',  // Отключаем проверку расширений в импортах
-    'class-methods-use-this': 'off',  // Отключаем требование использовать this в методах класса
-    'no-new': 'off',  // Разрешаем new без присваивания
+      // Отключаем проблемные правила
+      'import/extensions': 'off',
+      'class-methods-use-this': 'off',
+      'no-new': 'off',
+      'import/prefer-default-export': 'off',
 
-    // Jest специфичные правила
-    'jest/no-disabled-tests': 'warn',
-    'jest/no-focused-tests': 'error',
-    'jest/no-identical-title': 'error',
-    'jest/prefer-to-have-length': 'warn',
-    'jest/valid-expect': 'error'
-  },
-  overrides: [
-    {
-      // Тестовые файлы имеют свои правила
-      files: ['**/*.test.js', '**/tests/**/*.js', '**/tests-puppeteer/**/*.js'],
-      env: {
-        jest: true
-      },
-      rules: {
-        // В тестах можно использовать любой тип импорта
-        'import/no-extraneous-dependencies': 'off',
-
-        // В тестах можно использовать describe/it с любой вложенностью
-        'max-len': ['warn', { 'code': 150 }],  // Еще больше для тестов
-
-        // Разрешить использование expect в тестах
-        'no-unused-expressions': 'off',
-
-        // Разрешить импорт без расширения в тестах
-        'import/extensions': 'off',
-
-        // Разрешить require в тестах Puppeteer
-        'global-require': 'off',
-
-        // Разрешить присваивание в стрелочных функциях для тестов
-        'no-return-assign': 'off',
-
-        // Разрешить изменение параметров в тестах
-        'no-param-reassign': 'off'
+      // Правила для импортов
+      'import/no-extraneous-dependencies': ['error', {
+        devDependencies: [
+          '**/*.test.js',
+          '**/tests/**/*.js',
+          'jest.config.cjs',
+          'eslint.config.js'
+        ]
+      }]
+    },
+    settings: {
+      'import/resolver': {
+        node: {
+          extensions: ['.js'],
+          moduleDirectory: ['node_modules', 'src']
+        }
       }
     }
-  ],
-  settings: {
-    'import/resolver': {
-      node: {
-        extensions: ['.js'],
-        moduleDirectory: ['node_modules', 'src']
+  },
+
+  // Конфигурация для тестовых файлов
+  {
+    files: ['**/*.test.js', '**/tests/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.jest
       }
+    },
+    rules: {
+      'import/no-extraneous-dependencies': 'off',
+      'max-len': ['warn', { code: 150 }],
+      'no-unused-expressions': 'off',
+      'global-require': 'off',
+      'no-return-assign': 'off',
+      'no-param-reassign': 'off'
     }
+  },
+
+  // Игнорируемые файлы
+  {
+    ignores: [
+      'node_modules/**',
+      'coverage/**',
+      'dist/**'
+    ]
   }
-};
+];
