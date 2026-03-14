@@ -96,9 +96,8 @@ describe('CardValidator', () => {
     });
 
     test('should validate valid MIR test numbers', () => {
-      // Используем только проверенные рабочие номера
       const validMirNumbers = [
-        '2201382000000013' // Только этот номер точно работает
+        '2201382000000013'
       ];
 
       validMirNumbers.forEach((number) => {
@@ -106,25 +105,37 @@ describe('CardValidator', () => {
       });
     });
 
-    test('should return false for invalid numbers', () => {
-      const invalidNumbers = [
-        '4111111111111112',
-        '5555555555554445',
-        '1234567890123456',
-        '0000000000000000',
-        '2201382000000014',
-        '3530353035303530',
-        '2200000000000000',
-        '2204123456789012' // Добавляем проблемный МИР номер в невалидные
-      ];
+    // Разбиваем тест на несколько отдельных тестов
+    test('should return false for invalid Visa number', () => {
+      expect(CardValidator.validate('4111111111111112')).toBe(false);
+    });
 
-      invalidNumbers.forEach((number) => {
-        if (number === '0000000000000000') {
-          expect(CardValidator.validate(number)).toBe(true);
-        } else {
-          expect(CardValidator.validate(number)).toBe(false);
-        }
-      });
+    test('should return false for invalid Mastercard number', () => {
+      expect(CardValidator.validate('5555555555554445')).toBe(false);
+    });
+
+    test('should return false for random invalid number', () => {
+      expect(CardValidator.validate('1234567890123456')).toBe(false);
+    });
+
+    test('should return true for all zeros (edge case)', () => {
+      expect(CardValidator.validate('0000000000000000')).toBe(true);
+    });
+
+    test('should return false for invalid MIR number', () => {
+      expect(CardValidator.validate('2201382000000014')).toBe(false);
+    });
+
+    test('should return false for invalid JCB number', () => {
+      expect(CardValidator.validate('3530353035303530')).toBe(false);
+    });
+
+    test('should return false for invalid MIR number (all zeros with prefix)', () => {
+      expect(CardValidator.validate('2200000000000000')).toBe(false);
+    });
+
+    test('should return false for problematic MIR number', () => {
+      expect(CardValidator.validate('2204123456789012')).toBe(false);
     });
 
     test('should handle formatted numbers with spaces', () => {
