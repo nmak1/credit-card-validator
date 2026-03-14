@@ -9,7 +9,8 @@
     "test:coverage": "jest --coverage",
     "start": "npx http-server src -p 8081 -o",
     "lint": "eslint src/js/**/*.js tests/**/*.js",
-    "lint:fix": "eslint src/js/**/*.js tests/**/*.js --fix"
+    "lint:fix": "eslint src/js/**/*.js tests/**/*.js --fix",
+    "lint:ci": "eslint src/js/**/*.js tests/**/*.js --max-warnings 0"
   },
   "keywords": ["credit-card", "validator", "luhn-algorithm"],
   "author": "",
