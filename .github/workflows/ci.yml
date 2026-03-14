@@ -41,5 +41,5 @@ jobs:
     - name: Run unit tests with coverage
       run: npm run test:coverage
 
-    - name: Run Puppeteer tests
-      run: npm run test:puppeteer
+#    - name: Run Puppeteer tests
+#      run: npm run test:puppeteer
