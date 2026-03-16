@@ -13,7 +13,7 @@
 ## Установка
 
 ```bash
-git clone https://github.com/yourusername/credit-card-validator.git
+git clone https://github.com/nmak1/credit-card-validator.git
 cd credit-card-validator
 npm install
 ```

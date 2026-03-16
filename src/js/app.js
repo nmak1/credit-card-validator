@@ -18,15 +18,20 @@ class CreditCardApp {
   }
 
   handleInput(e) {
-    const rawValue = e.target.value;
-    const cleaned = rawValue.replace(/[^\d]/g, '');
+    const inputEl = e.target;
+    const rawValue = inputEl.value;
+    const selectionStart = inputEl.selectionStart ?? rawValue.length;
+    const digitsBeforeCaret = rawValue.slice(0, selectionStart).replace(/\D/g, '').length;
+
+    const cleaned = rawValue.replace(/\D/g, '');
 
     // Limit to 19 digits (максимальная длина номера карты)
     const limited = cleaned.slice(0, 19);
 
     // Format with spaces
     const formatted = CardValidator.format(limited);
-    e.target.value = formatted;
+    inputEl.value = formatted;
+    this.setCaretByDigitsIndex(inputEl, digitsBeforeCaret);
 
     // Update card display
     this.updateCardDisplay(limited);
@@ -42,19 +47,56 @@ class CreditCardApp {
     }
   }
 
-  handleKeyDown(e) {
-    // Allow: backspace, delete, tab, escape, enter, arrows, numbers
-    const allowedKeys = [46, 8, 9, 27, 13, 110, 190];
-    const isCtrlA = e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true);
-    const isArrowKey = e.keyCode >= 35 && e.keyCode <= 40;
+  setCaretByDigitsIndex(inputEl, digitsIndex) {
+    if (typeof inputEl.setSelectionRange !== 'function') return;
 
-    if (allowedKeys.includes(e.keyCode) || isCtrlA || isArrowKey) {
+    const clampedDigitsIndex = Math.max(0, Math.min(digitsIndex, 19));
+    const value = inputEl.value ?? '';
+
+    let digitsSeen = 0;
+    let caretPos = value.length;
+
+    for (let i = 0; i < value.length; i += 1) {
+      if (/\d/.test(value[i])) {
+        digitsSeen += 1;
+        if (digitsSeen >= clampedDigitsIndex) {
+          caretPos = i + 1;
+          break;
+        }
+      }
+    }
+
+    inputEl.setSelectionRange(caretPos, caretPos);
+  }
+
+  handleKeyDown(e) {
+    // Allow: navigation/editing keys + common shortcuts
+    const allowedKeys = new Set([
+      'Backspace',
+      'Delete',
+      'Tab',
+      'Escape',
+      'Enter',
+      'ArrowLeft',
+      'ArrowRight',
+      'ArrowUp',
+      'ArrowDown',
+      'Home',
+      'End',
+    ]);
+
+    if (allowedKeys.has(e.key)) {
       return;
     }
 
-    // Ensure it's a number
-    const isNumberKey = (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105);
-    if (e.shiftKey || !isNumberKey) {
+    // Allow: copy/paste/select all/cut
+    if ((e.ctrlKey || e.metaKey) && ['a', 'c', 'v', 'x'].includes(e.key.toLowerCase())) {
+      return;
+    }
+
+    // Block anything that's not a single digit.
+    // Note: we still clean on 'input' as the source of truth (covers paste/autofill/IME).
+    if (!/^\d$/.test(e.key)) {
       e.preventDefault();
     }
   }
